@@ -42,36 +42,56 @@ sk3=8289751523520652493614165666150927031038454322927867752320214615631
 
 # Part 2:Assign values that you compute to those parameters as part of your answers to (a) (b) and (c)
 # (a) list all prime factors of p-1, list 3 public keys pk_i's corresponding to sk_i's, those numbers should be decimal integers
-pfactor1=
-pfacotr2=
+
+pfactor1=2
+pfactor2=13479974306915323548855049186344013292925286365246579443817723220231
 pfactor3=
 
-pk1=
-pk2=
-pk3=
+pk1=(g**sk1)%p
+pk2=(g**sk2)%p
+pk3=(g**sk3)%p
 
 # (b) Sig_sk1 and Sig_sk2, k_i is the random number used in signature. 
 # u, v, w is the intermediate results when verifying Sig_sk1(m1)
 # All variables should be decimal integers
 
 # (b)(1)
-k1=
-r1=
-s1=
+
+N = 224 # (bit-length of q)
+outlen = 224 # bit length of hash function output block
+amt0 = 5
+amt1 = 4
+amt2 = 3
+
+# NOTE: May need to pad pk1 and pk2 with zeros if less than 2048 bits
+m1 = pk1~pk2~amt1 # bit length of m1 is 4104
+
+k1= sha3_224_hex(m1) 
+r1= (g**k1 % p) % q
+s1= ((k1**-1)*(k1 + x*r1)) % q # TODO: Need to determine x
 
 # (b)(2)
-w=
-u1=
-u2=
-v=
+w= (s1**-1)%q
+u1= (k1*w)%q
+u2= (r1*w)%q
+v= (((g**u1)(y**u2))%p)%q
 
 # (b)(3)
-k2=
-r2=
-s2=
+
+# NOTE: May need to pad pk1 and pk2 with zeros if less than 2048 bits
+m2 = pk2~pk3~amt2 # bit length of m1 is 4104
+
+k2= sha3_224_hex(m2)
+r2= (g**k2 % p) % q
+s2= ((k2**-1)*(k2 + x*r2)) % q # x?
 
 
 # (c) PreImageOfPW1=h(amt0)||m1||nonce1, PreImageOfPW1=h(m1)||m2||nonce2, those two variables should be hex strings with on prefix of 0x
+
+h(amt0) = 
+nonce1 = # 128-bit number w/ 32-consecutive leading zeros
+nonce2 = # 128-bit number w/ 32-consecutive leading zeros
+
 PreImageOfPW1=""
 PreImageOfPW2=""
 
